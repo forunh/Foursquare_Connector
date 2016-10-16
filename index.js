@@ -3,12 +3,12 @@ import express from 'express'
 import bodyParser from 'body-parser'
 // import twitterRouter from './controller/TwitterController'
 import cors from 'cors'
-import foursquare from 'node-foursquare'
+import mfq from 'node-foursquare'
 // import swagger from 'swagger-node-express'
 // import { applicationUrl, swaggerPath } from './swagger'
 
 //Port
-const port = process.env.port || 7777
+const port = process.env.port || 6003
 let app = express()
 
 //enable cors
@@ -32,7 +32,8 @@ let config = {
             // 'redirectUrl' : 'REDIRECT_URL'
         }
 }
-// let foursquare = require('node-foursquare')(config);
+
+var foursquare = mfq(config);
 
 app.get('/login', function(req, res) {
   res.writeHead(303, { 'location': foursquare.getAuthClientRedirectUrl() });

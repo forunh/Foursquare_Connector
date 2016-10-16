@@ -1,5 +1,4 @@
 import foursquare from 'node-foursquare'
-import { db } from '../db'
 import cron from 'cron'
 import request from 'request'
 
