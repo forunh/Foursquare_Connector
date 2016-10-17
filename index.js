@@ -3,7 +3,7 @@ import express from 'express'
 import bodyParser from 'body-parser'
 // import twitterRouter from './controller/TwitterController'
 import cors from 'cors'
-import mfq from 'node-foursquare'
+// import mfq from 'node-foursquare'
 // import swagger from 'swagger-node-express'
 // import { applicationUrl, swaggerPath } from './swagger'
 
@@ -24,16 +24,6 @@ app.use(bodyParser.urlencoded({
 app.route('/').get((req, res) => {
   res.send('<h1>Social REST Api</h1>')
 })
-
-let config = {
-     'secrets' : {
-            'clientId' : 'VYPDJ2Z5QROWDVGISDDRSS2MWQTARTSUU0LKLK3BONI03W35',
-            'clientSecret' : 'TSJ5KW4EQYLGA5MKDKKAXFFJQJ5KGCUUCN3H3DWUJBTYJ4CQ',
-            // 'redirectUrl' : 'REDIRECT_URL'
-        }
-}
-
-var foursquare = mfq(config);
 
 app.get('/login', function(req, res) {
   res.writeHead(303, { 'location': foursquare.getAuthClientRedirectUrl() });
