@@ -1,0 +1,235 @@
+{
+  "swagger": "2.0",
+  "info": {
+    "version": "1.0.0",
+    "title": "Foursquare Connector",
+    "description": "All things you can use in this API"
+  },
+  "basePath": "/",
+  "tags" : [
+    {
+      "name": "Foursquare",
+      "description": "API for connecting Foursquare"
+    }
+  ],
+  "schemes": [
+    "http"
+  ],
+  "consumes": [
+    "application/json"
+  ],
+  "produces": [
+    "application/json"
+  ],
+  "paths": {
+    "/foursquare/searchVenues": {
+      "get":{
+        "tags": [ "Foursquare"],
+        "description": "search venue in area by given geolocation",
+        "operationId": "",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "geolocation",
+            "in": "query",
+            "description": "geolocation (lat, long)",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "response"
+          }
+        }
+      }
+    },
+     "/foursquare/herenow": {
+      "get":{
+        "tags": [ "Foursquare"],
+        "description": "get current number of user in venue",
+        "operationId": "",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "venue_id",
+            "in": "query",
+            "description": "venue_id",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "response"
+          }
+        }
+      }
+    },
+    "/foursquare/nextVenue": {
+      "get":{
+        "tags": [ "Foursquare"],
+        "description": "next venue user usually go from current venue",
+        "operationId": "",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "venue_id",
+            "in": "query",
+            "description": "venue_id",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "response"
+          }
+        }
+      }
+    },
+    "/foursquare/venueTips": {
+      "get":{
+        "tags": [ "Foursquare"],
+        "description": "tips about the venue",
+        "operationId": "",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "venue_id",
+            "in": "query",
+            "description": "venue_id",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "response"
+          }
+        }
+      }
+    },
+    "/foursquare/venueHours": {
+      "get":{
+        "tags": [ "Foursquare"],
+        "description": "popular hours on the venue",
+        "operationId": "",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "venue_id",
+            "in": "query",
+            "description": "venue_id",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "response"
+          }
+        }
+      }
+    },
+     "/foursquare/trendingVenue": {
+      "get":{
+        "tags": [ "Foursquare"],
+        "description": "get Detail of given PageID",
+        "operationId": "",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "geolocation",
+            "in": "query",
+            "description": "popular venues in the area by given geolocation",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "response"
+          }
+        }
+      }
+    }
+  },
+  "definitions": {
+    "create": {
+      "properties": {
+        "eventId": {
+          "required":true,
+          "type": "string",
+          "example": "mathmaticial"
+        },
+        "numberRequired": {
+          "required":true,
+          "type":"integer",
+          "format": "int64",
+          "example": 500
+        }
+      }
+    },
+    "response1": {
+      "properties": {
+        "jobID": {
+          "required":true,
+          "type": "string",
+          "example": "23423456543"
+        },
+        "request": {
+          "required":true,
+          "type": "schema",
+          "example": {
+            "eventId":"mathmaticial",
+            "numberRequired": 500
+          }
+        }
+      }
+    },
+    "response": {
+      "properties": {
+        "jobID": {
+          "required": true,
+          "type" : "string",
+          "example" : "12321432423"
+        }
+      }
+    },
+    "delete": {
+      "properties": {
+        "jobID": {
+          "required": true,
+          "type" : "string",
+          "example" : "234344234234"
+        },
+        "status" : {
+          "required": true,
+          "type": "string",
+          "example": "deleted"
+        }
+      }
+    },
+    "400error" : {
+      "properties": {
+        "message": {
+          "type": "string",
+          "example" : "400 Bad Request"
+        }
+      }
+    }
+  }
+}
