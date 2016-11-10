@@ -16,6 +16,20 @@ foursquareRouter.route('/searchVenues').get((req, res) => {
       
     })
 })
+foursquareRouter.route('/detail').get((req, res) => {
+
+    FoursquareService.VenueDetail(req.query.venue_id).then( out => {
+      res.send(JSON.parse(out))
+      
+    })
+})
+foursquareRouter.route('/photo').get((req, res) => {
+
+    FoursquareService.VenuePhoto(req.query.venue_id).then( out => {
+      res.send(JSON.parse(out))
+      
+    })
+})
 foursquareRouter.route('/herenow').get((req, res) => {
 
     FoursquareService.VenueHereNow(req.query.venue_id).then( out => {

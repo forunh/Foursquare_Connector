@@ -18,7 +18,27 @@ export function searchVenues(geolocation){
         })
     })
 }
-
+export function VenueDetail(venue_id){
+    return new Promise((resolve) => {
+   
+        request({url:'https://api.foursquare.com/v2/venues/'+venue_id, qs:params},(err, response, body) => {
+            if(err) { console.log(err); return; }
+        
+            resolve(body)
+        })
+    })
+}
+export function VenuePhoto(venue_id){
+    
+    return new Promise((resolve) => {
+   
+        request({url:'https://api.foursquare.com/v2/venues/'+venue_id+'/photos', qs:params},(err, response, body) => {
+            if(err) { console.log(err); return; }
+        
+            resolve(body)
+        })
+    })
+}
 export function VenueHereNow(venue_id){
     
     return new Promise((resolve) => {
