@@ -190,15 +190,15 @@ function saveFQpopularHour (venueID){
     VenueHours(venueID).then(res => {
         const x = JSON.parse(res)        
         const hours = x.response.popular
-        checkin.venueId = venueID
-        checkin.lastUpdated = new Date().toString()
-        db.FQ_POPULARHOUR.update({venueId : venueID},(err,document) => {
+        hours.venueId = venueID
+        hours.lastUpdated = new Date().toString()
+        db.FQ_POPULARHOUR.update({venueId : venueID},hours,(err,document) => {
             // if(!document){  
-                db.FQ_POPULARHOUR.insert(checkin, err => {
+                // db.FQ_POPULARHOUR.insert(checkin, err => {
                     if(err){
                         console.log(err)
                     }
-                })
+                // })
             // }
         })
     })
