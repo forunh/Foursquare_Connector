@@ -213,7 +213,7 @@ const cronSave30 = new cronJob('*/30 * * * * *', () => {
 true
 )
 
-const cronSave60 = new cronJob('*/3600 * * * * *', () => {
+const cronSave60 = new cronJob('* * */1 * * *', () => {
   venueIDs.forEach(venueID => {
     saveFQpopularHour(venueID)
     saveFQvenue(venueID)
