@@ -118,10 +118,11 @@ function today(){
 }
 
 function saveFQvenue (venueID){
-  db.FQ_VENUE.findOne({venueId: venueID}, (err, document) => {
+  db.FQ_VENUE.findOne({id: venueID}, (err, document) => {
     if(!document) {
       VenueDetail(venueID).then(page => {
-        db.FQ_VENUE.insert(page.response.venue, err => {
+        const res = JSON.parse(page)          
+        db.FQ_VENUE.insert(res.response.venue, err => {
           if(err) {
             console.log(err)
           }
@@ -133,7 +134,8 @@ function saveFQvenue (venueID){
 
 function saveFQtip (venueID){
     venueTips(venueID).then(res => {
-        res.response.tips.items.forEach(tip => {
+        const x = JSON.parse(res)
+        x.response.tips.items.forEach(tip => {
             db.FQ_TIP.findOne({id : tip.id},(err,document) => {
                 if(!document){
                     tip.venueId = venueID
@@ -150,7 +152,8 @@ function saveFQtip (venueID){
 
 function saveFQphoto (venueID){
     VenuePhoto(venueID).then(res => {
-        res.response.photos.items.forEach(photo => {
+        const x = JSON.parse(res)        
+        x.response.photos.items.forEach(photo => {
             db.FQ_PHOTO.findOne({id : photo.id},(err,document) => {
                 if(!document){
                     photo.venueId = venueID
@@ -167,7 +170,8 @@ function saveFQphoto (venueID){
 
 function saveFQcheckin (venueID){
     VenueHereNow(venueID).then(res => {
-        const checkin = res.response.hereNow
+        const x = JSON.parse(res)        
+        const checkin = x.response.hereNow
         db.FQ_PHOTO.findOne({id : photo.id},(err,document) => {
             if(!document){  
                 checkin.venueId = venueID
@@ -184,7 +188,8 @@ function saveFQcheckin (venueID){
 
 function saveFQpopularHour (venueID){
     VenueHours(venueID).then(res => {
-        const hours = res.response.popular
+        const x = JSON.parse(res)        
+        const hours = x.response.popular
         db.FQ_POPULARHOUR.findOne({id : photo.id},(err,document) => {
             if(!document){  
                 checkin.venueId = venueID
