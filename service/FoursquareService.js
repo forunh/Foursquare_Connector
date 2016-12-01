@@ -122,7 +122,7 @@ function saveFQvenue (venueID){
     if(!document) {
       VenueDetail(venueID).then(page => {
         const res = JSON.parse(page)          
-        db.FQ_VENUE.insert(res.response.venue, err => {
+        db.FQ_VENUE.update(res.response.venue, err => {
           if(err) {
             console.log(err)
           }
@@ -172,8 +172,8 @@ function saveFQcheckin (venueID){
     VenueHereNow(venueID).then(res => {
         const x = JSON.parse(res)        
         const checkin = x.response.hereNow
-        db.FQ_PHOTO.findOne({id : photo.id},(err,document) => {
-            if(!document){  
+        // db.FQ_PHOTO.findOne({id : photo.id},(err,document) => {
+            // if(!document){  
                 checkin.venueId = venueID
                 checkin.datetime = new Date().toString()
                 db.FQ_PHOTO.insert(checkin, err => {
@@ -181,8 +181,8 @@ function saveFQcheckin (venueID){
                         console.log(err)
                     }
                 })
-            }
-        })
+            // }
+        // })
     })
 }
 
@@ -190,16 +190,16 @@ function saveFQpopularHour (venueID){
     VenueHours(venueID).then(res => {
         const x = JSON.parse(res)        
         const hours = x.response.popular
-        db.FQ_POPULARHOUR.findOne({id : photo.id},(err,document) => {
-            if(!document){  
-                checkin.venueId = venueID
-                checkin.datetime = new Date().toString()
+        checkin.venueId = venueID
+        checkin.lastUpdated = new Date().toString()
+        db.FQ_POPULARHOUR.update({venueId : venueID},(err,document) => {
+            // if(!document){  
                 db.FQ_POPULARHOUR.insert(checkin, err => {
                     if(err){
                         console.log(err)
                     }
                 })
-            }
+            // }
         })
     })
 }
@@ -218,7 +218,7 @@ const cronSave30 = new cronJob('*/30 * * * * *', () => {
 true
 )
 
-const cronSave60 = new cronJob('* * */1 * * *', () => {
+const cronSave60 = new cronJob('*/30 * * * * *', () => {
   venueIDs.forEach(venueID => {
     saveFQpopularHour(venueID)
     saveFQvenue(venueID)
