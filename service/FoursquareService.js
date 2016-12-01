@@ -122,7 +122,7 @@ function saveFQvenue (venueID){
     if(!document) {
       VenueDetail(venueID).then(page => {
         const res = JSON.parse(page)          
-        db.FQ_VENUE.update(res.response.venue, err => {
+        db.FQ_VENUE.insert(res.response.venue, err => {
           if(err) {
             console.log(err)
           }
