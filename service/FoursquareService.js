@@ -19,7 +19,7 @@ let params ={
 const cronJob = cron.CronJob
 // const venueIDs = ['4c034d0cf56c2d7fa6c71c66']
 const venueIDs = ['4c034d0cf56c2d7fa6c71c66','4af833a6f964a5205a0b22e3','4b0587fdf964a52034ab22e3']
-//kmitl airport siamparagon
+//kmitl airport siamparagon 
 export function searchVenues(geolocation){
     params.ll = geolocation
     return new Promise((resolve) => {
@@ -40,6 +40,8 @@ export function VenueDetail(venue_id){
     })
 }
 export function VenuePhoto(venue_id){
+    params.limit=200
+    params.group='venue'
     return new Promise((resolve) => {
         request({url:'https://api.foursquare.com/v2/venues/'+venue_id+'/photos', qs:params},(err, response, body) => {
             if(err) { console.log(err); return; }
@@ -74,10 +76,14 @@ export function nextVenue(venue_id){
 export function venueTips(venue_id){
     
     params.sort = "recent"
+    params.limit = 500
     return new Promise((resolve) => {
    
         request({url:'https://api.foursquare.com/v2/venues/'+venue_id+'/tips', qs:params},(err, response, body) => {
             if(err) { console.log(err); return; }
+        const x = JSON.parse(body)
+            
+            console.log(x.response.tips.items.length)
         
             resolve(body)
         })
@@ -125,21 +131,20 @@ function today(){
 }
 
 function saveFQvenue (venueID){
-  db.FQ_VENUE.findOne({id: venueID}, (err, document) => {
-    if(!document) {
+  
       VenueDetail(venueID).then(page => {
         const res = JSON.parse(page) 
         if(res.meta.code == 200)    
         {         
-            db.FQ_VENUE.insert(res.response.venue, err => {
+            db.FQ_VENUE.update({venueId : venueID},res.response.venue,
+                { upsert:true}, err => {
             if(err) {
                 console.log(err)
             }
             })
         }
       })
-    }
-  })
+  
 }
 
 function saveFQtip (venueID){
@@ -147,6 +152,7 @@ function saveFQtip (venueID){
         const x = JSON.parse(res)
         if(x.meta.code == 200)    
         {
+            
             x.response.tips.items.forEach(tip => {
                 db.FQ_TIP.findOne({id : tip.id},(err,document) => {
                     if(!document){
@@ -168,9 +174,11 @@ function saveFQphoto (venueID){
         const x = JSON.parse(res)        
         if(x.meta.code == 200)    
         {
+            // console.log(x.response.photos.items.length)
             x.response.photos.items.forEach(photo => {
                 db.FQ_PHOTO.findOne({id : photo.id},(err,document) => {
                     if(!document){
+
                         photo.venueId = venueID
                         db.FQ_PHOTO.insert(photo, err => {
                             if(err){
@@ -206,10 +214,12 @@ function saveFQpopularHour (venueID){
         const x = JSON.parse(res)    
         if(x.meta.code == 200)    
         {    
+            // console.log(x.meta)
             const hours = x.response.popular
             hours.venueId = venueID
             hours.lastUpdated = new Date().toString()
-            db.FQ_POPULARHOUR.update({venueId : venueID},hours,(err,document) => {
+            db.FQ_POPULARHOUR.update({venueId : venueID},hours,
+                { upsert:true },(err,document) => {
                 // if(!document){  
                     // db.FQ_POPULARHOUR.insert(checkin, err => {
                         if(err){
@@ -227,6 +237,7 @@ const cronSave1min = new cronJob('00 * * * * *', () => {
     saveFQtip(venueID)
     saveFQphoto(venueID)
     saveFQcheckin(venueID)
+    // saveFQpopularHour(venueID)
   })
     console.log(new Date().toString())
   
@@ -237,7 +248,7 @@ const cronSave1min = new cronJob('00 * * * * *', () => {
 true
 )
 
-const cronSave1hr = new cronJob('00 21 23 * * *', () => {
+const cronSave1hr = new cronJob('00 00 24 * * *', () => {
   venueIDs.forEach(venueID => {
     saveFQpopularHour(venueID)
     saveFQvenue(venueID)
