@@ -2,20 +2,21 @@ import request from 'request'
 import cron from 'cron'
 import { db } from '../db'
 
-// let params ={
-//             // ll:'40.7,-74',
-//             client_id : 'VYPDJ2Z5QROWDVGISDDRSS2MWQTARTSUU0LKLK3BONI03W35',
-//             client_secret : 'TSJ5KW4EQYLGA5MKDKKAXFFJQJ5KGCUUCN3H3DWUJBTYJ4CQ',
-//             v : today()
-            
-// }
 let params ={
+            // ll:'40.7,-74',
+            client_id : 'VYPDJ2Z5QROWDVGISDDRSS2MWQTARTSUU0LKLK3BONI03W35',
+            client_secret : 'TSJ5KW4EQYLGA5MKDKKAXFFJQJ5KGCUUCN3H3DWUJBTYJ4CQ',
+            v : today()
+            
+}
+let params2 ={
             // ll:'40.7,-74',
             client_id : '2ANDJSV5P2FT3GNVOQNSDQQSPJ5XRNO5XQR2COKWNG0I1K5C',
             client_secret : 'NXTDWJVI4RNEKJIBAUIQBKCHL1IWYIJST1YOKOJOYFWNY4KT',
             v : today()
             
 }
+
 const cronJob = cron.CronJob
 // const venueIDs = ['4c034d0cf56c2d7fa6c71c66']
 const venueIDs = ['4c034d0cf56c2d7fa6c71c66','4af833a6f964a5205a0b22e3','4b0587fdf964a52034ab22e3']
@@ -53,7 +54,7 @@ export function VenueHereNow(venue_id){
     
     return new Promise((resolve) => {
    
-        request({url:'https://api.foursquare.com/v2/venues/'+venue_id+'/herenow', qs:params},(err, response, body) => {
+        request({url:'https://api.foursquare.com/v2/venues/'+venue_id+'/herenow', qs:params2},(err, response, body) => {
             if(err) { console.log(err); return; }
         
             resolve(body)
@@ -83,7 +84,7 @@ export function venueTips(venue_id){
             if(err) { console.log(err); return; }
         const x = JSON.parse(body)
             
-            console.log(x.response.tips.items.length)
+            // console.log(x.response.tips.items.length)
         
             resolve(body)
         })
@@ -114,6 +115,7 @@ export function VenueHours(venue_id){
         })
     })
 }
+
 function today(){
     let month = new Date().getMonth()+1
     let date = new Date().getDate()
@@ -138,9 +140,9 @@ function saveFQvenue (venueID){
         {         
             db.FQ_VENUE.update({venueId : venueID},res.response.venue,
                 { upsert:true}, err => {
-            if(err) {
-                console.log(err)
-            }
+                if(err) {
+                    console.log(err)
+                }
             })
         }
       })
@@ -232,34 +234,34 @@ function saveFQpopularHour (venueID){
     })
 }
 
-const cronSave1min = new cronJob('00 * * * * *', () => {
-  venueIDs.forEach(venueID => {
-    saveFQtip(venueID)
-    saveFQphoto(venueID)
-    saveFQcheckin(venueID)
-    // saveFQpopularHour(venueID)
-  })
-    console.log(new Date().toString())
+// const cronSave1min = new cronJob('00 * * * * *', () => {
+//   venueIDs.forEach(venueID => {
+//     saveFQtip(venueID)
+//     saveFQphoto(venueID)
+//     saveFQcheckin(venueID)
+//     // saveFQpopularHour(venueID)
+//   })
+//     console.log(new Date().toString())
   
-},
-() => {
-  console.log('cronSaveFBcomment')
-},
-true
-)
+// },
+// () => {
+//   console.log('cronSaveFBcomment')
+// },
+// true
+// )
 
-const cronSave1hr = new cronJob('00 00 24 * * *', () => {
-  venueIDs.forEach(venueID => {
-    saveFQpopularHour(venueID)
-    saveFQvenue(venueID)
+// const cronSave1hr = new cronJob('00 00 24 * * *', () => {
+//   venueIDs.forEach(venueID => {
+//     saveFQpopularHour(venueID)
+//     saveFQvenue(venueID)
     
-  })
-    console.log(new Date().toString())
+//   })
+//     console.log(new Date().toString())
   
-},
-() => {
-  console.log('cronSaveFBcomment')
-},
-true
-)
+// },
+// () => {
+//   console.log('cronSaveFBcomment')
+// },
+// true
+// )
 

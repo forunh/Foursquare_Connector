@@ -2,6 +2,7 @@
 import express from 'express'
 import bodyParser from 'body-parser'
 import foursquareRouter from './controller/FoursquareController'
+import foursquareConnector from './connector/FoursquareConnector'
 import cors from 'cors'
 import swagger from 'swagger-node-express'
 import { applicationUrl, swaggerPath } from './swagger'
