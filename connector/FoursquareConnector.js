@@ -73,7 +73,7 @@ export function saveCheckin(checkinData){
         method: "POST",
         json: checkinData
          },(error, response, body) => {
-            if(error) { console.log(error); return; } 
+            if(error) { console.log(error.code); return; } 
             // console.log(response.statusCode)
     })
 }
@@ -84,7 +84,7 @@ export function saveTip(tipData){
         method: "POST",
         json: tipData
          },(error, response, body) => {
-            if(error) { console.log(error); return; } 
+            if(error) { console.log(error.code); return; } 
             // console.log(response.statusCode)
     })
 }
@@ -95,7 +95,7 @@ export function savePhoto(photoData){
         method: "POST",
         json: photoData
          },(error, response, body) => {
-            if(error) { console.log(error); return; } 
+            if(error) { console.log(error.code); return; } 
             // console.log(response.statusCode)
     })
 }
