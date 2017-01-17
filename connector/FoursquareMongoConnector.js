@@ -22,7 +22,7 @@ function saveFQvenue (venueID){
         const res = JSON.parse(page) 
         if(res.meta.code == 200)    
         {         
-            db.FQ_VENUE.update({venueId : venueID},res.response.venue,
+            db.FQ_VENUE.update({id : venueID},res.response.venue,
                 { upsert:true}, err => {
                 if(err) {
                     console.log(err)
@@ -143,7 +143,7 @@ const cronSave30min = new cronJob('*/30 * * * *', () => {
     saveFQtip(venueID)
     saveFQphoto(venueID)
   })
-    console.log("DB"+new Date().toString())
+    console.log("DB tip photo "+new Date().toString())
   
 },
 () => {
@@ -153,13 +153,13 @@ true
 )
 
 const cronSave1hr = new cronJob('00 00 24 * * *', () => {
-    
+
   venueIDs.forEach(venueID => {
     saveFQpopularHour(venueID)
     saveFQvenue(venueID)
     
   })
-    console.log("DB"+new Date().toString())
+    console.log("DB venue popular "+new Date().toString())
   
 },
 () => {
