@@ -6,8 +6,9 @@ let RepoAddress = "http://203.151.85.73:5002"
 const cronJob = cron.CronJob
 
 const cronSave5min = new cronJob('*/5 * * * *', () => {
+    
     request({url:RepoAddress+'/foursquare/getAllVenue'},(err, response, body) => {
-        if(err) { console.log(err); return; }
+        if(err) { console.log("getAllVenue "+err.code+getDate()); return; }
         if(response.statusCode == 200){
             let allVenue = JSON.parse(body)      
             allVenue.venues.forEach(venue => {            
@@ -17,7 +18,7 @@ const cronSave5min = new cronJob('*/5 * * * *', () => {
                     {
                         let checkinData = {}
                         checkinData.hereNow = res.response.hereNow
-                        checkinData.venueId = venue.venueid
+                        checkinData.venueId = venue.venueid                        
                         saveCheckin(checkinData)
                     }
                 })
@@ -33,7 +34,7 @@ true
 
 const cronSave30min = new cronJob('*/30 * * * *', () => {
     request({url:RepoAddress+'/foursquare/getAllVenue'},(err, response, body) => {
-        if(err) { console.log(err); return; }
+        if(err) { console.log("getAllVenue "+err.code+getDate()); return; }
         if(response.statusCode == 200){
             let allVenue = JSON.parse(body)      
             allVenue.venues.forEach(venue => {            
@@ -73,8 +74,8 @@ export function saveCheckin(checkinData){
         method: "POST",
         json: checkinData
          },(error, response, body) => {
-            if(error) { console.log(error.code); return; } 
-            // console.log(response.statusCode)
+            if(error) { console.log("checkin "+error.code+getDate()); return; }
+            console.log("checkin "+ response.statusCode+getDate())
     })
 }
 
@@ -84,8 +85,8 @@ export function saveTip(tipData){
         method: "POST",
         json: tipData
          },(error, response, body) => {
-            if(error) { console.log(error.code); return; } 
-            // console.log(response.statusCode)
+            if(error) { console.log("tips "+error.code+getDate); return; } 
+            console.log("tips "+response.statusCode+getDate())
     })
 }
 
@@ -95,7 +96,12 @@ export function savePhoto(photoData){
         method: "POST",
         json: photoData
          },(error, response, body) => {
-            if(error) { console.log(error.code); return; } 
-            // console.log(response.statusCode)
+            if(error) { console.log("photos "+error.code+getDate()); return; } 
+            console.log("photos "+response.statusCode+getDate())
     })
+}
+
+export function getDate(){
+    let date = new Date()
+    return " "+date.toString()
 }
